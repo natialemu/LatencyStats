@@ -1,0 +1,65 @@
+
+
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Eclipse
+.classpath
+.project
+.checkstyle
+.settings/
+*.launch
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Netbeans
+nb-configuration.xml
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+logs/
+work/
+target/
+classes/
+report/
+src/main/resources/git.properties
+
+# http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#runOrder
+.surefire-*
+
+# GWT
+*/.gwt
+*/src/main/webapp/WEB-INF/classes/
+
+# Env
+*.log
+
+# Git
+*.orig
+
+# Jenv
+.java-version
+
+# Jrebel
+rebel*.xml
+
+#Spring
+*.pid
+*.springBeans
+
