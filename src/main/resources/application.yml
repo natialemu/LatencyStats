@@ -1,0 +1,19 @@
+application:
+  name: "Latency Stats"
+  home: target/
+
+endpoints.enabled: true
+
+server:
+  tomcat:
+    basedir: ${application.home}
+    max-threads: 10
+    remote-ip-header: x-forwarded-for
+    protocol-header: x-forwarded-proto
+  port: 8443
+
+spring.datasource:
+  url: "Create another instance of RDS"
+  username: "create username"
+  password: "create password"
+
