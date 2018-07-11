@@ -8,7 +8,7 @@ import java.util.List;
 
 public class ExecutionTimeHelper {
     private static ExecutionGraph graph;
-    private static ServiceAST service = AstBuilder.getService();
+    private static ServiceAST service;
 
     public ExecutionTimeHelper(String appName, String requestID){
         graph = ExecutionGraphBuilder.getExecutionGraph(appName,requestID);

@@ -65,6 +65,7 @@ public class LogReportResource {
 
     @RequestMapping(value = "/full", consumes = "application/json", method = RequestMethod.POST)
     public ResponseEntity<?> createFullAppLog(){
+        return null;
 
     }
     @RequestMapping(value = "/app", consumes = "application/json", method = RequestMethod.POST)
@@ -77,20 +78,24 @@ public class LogReportResource {
          *              stackPopOrer:
          */
 
+        return null;
     }
 
     @RequestMapping(value = "/method/", consumes = "application/json", method = RequestMethod.PUT)
     public ResponseEntity<?> changeMethodName(){
+        return null;
 
     }
 
     @RequestMapping(value = "/app", consumes = "application/json", method = RequestMethod.PUT)
     public ResponseEntity<?> changeAppName(){
+        return null;
 
     }
 
     @RequestMapping(value = "/class", consumes = "application/json", method = RequestMethod.PUT)
     public ResponseEntity<?> changeClassName(){
+        return null;
 
     }
 }
