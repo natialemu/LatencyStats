@@ -13,7 +13,7 @@ server:
   port: 8443
 
 spring.datasource:
-  url: "Create another instance of RDS"
-  username: "create username"
-  password: "create password"
+  url: "jdbc:mysql://latencystatsdb.cedako7zoc64.us-west-2.rds.amazonaws.com:3306/LatancyStatsServiceDB"
+  username: "nathnael2"
+  password: "NatMysql_AWS_19"
 
