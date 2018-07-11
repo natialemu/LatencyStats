@@ -7,11 +7,16 @@ import domain.execution.ExecutionGraph;
 import java.util.List;
 
 public class ExecutionTimeHelper {
-    private static ExecutionGraph graph = ExecutionGraphBuilder.getExecutionGraph();
+    private static ExecutionGraph graph;
     private static ServiceAST service = AstBuilder.getService();
 
+    public ExecutionTimeHelper(String appName, String requestID){
+        graph = ExecutionGraphBuilder.getExecutionGraph(appName,requestID);
+        service = AstBuilder.getService(appName,requestID);
+    }
 
-    public static ServiceAST getTimeAdjustedService(){
+
+    public ServiceAST getTimeAdjustedService(){
         correctExecutiontime(service);
         return service;
     }

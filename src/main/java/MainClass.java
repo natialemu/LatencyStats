@@ -1,13 +1,14 @@
+import domain.LatencyStatsFacade;
 import domain.abstraction.MethodAbs;
 import domain.abstraction.ServiceAST;
-import domain.builder.AstBuilder;
 import domain.builder.ExecutionTimeHelper;
 
 public class MainClass {
 
     public static void main(String[] args){
 
-        ServiceAST service = ExecutionTimeHelper.getTimeAdjustedService();
+        ExecutionTimeHelper helper = new ExecutionTimeHelper("testApp","123");
+        ServiceAST service = helper.getTimeAdjustedService();
 
         LatencyStatsFacade latencyStats = new LatencyStatsFacade(service);
 

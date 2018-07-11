@@ -9,8 +9,11 @@ public class AstBuilder {
 
     private static final String LATENCY_LOG_FILE = "/Users/nalemu/Documents/EWE/dayaway/Logs/latency_log.csv";
 
-    public static ServiceAST getService(){
+    public static ServiceAST getService(String appName, String requestID){
         ServiceAST serviceAST=null;
+        /**
+         * Use DAOs to get the neccessary data to build AST
+         */
         try {
             File file =
                     new File(LATENCY_LOG_FILE);

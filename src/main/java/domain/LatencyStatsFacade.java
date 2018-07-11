@@ -1,3 +1,5 @@
+package domain;
+
 import domain.abstraction.ApplicationAbs;
 import domain.abstraction.ClassAbs;
 import domain.abstraction.MethodAbs;
