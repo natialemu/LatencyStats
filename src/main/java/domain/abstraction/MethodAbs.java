@@ -1,6 +1,5 @@
 package domain.abstraction;
 
-import domain.builder.ExecutionGraphBuilder;
 import domain.execution.ExecutionGraph;
 
 import java.util.ArrayList;

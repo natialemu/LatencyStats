@@ -2,16 +2,21 @@ package domain.builder;
 
 import domain.abstraction.MethodAbs;
 import domain.abstraction.ServiceAST;
-import domain.execution.ExecutionGraph;
+import domain.execution.Empty;
+import domain.execution.ExTree;
 
 import java.util.List;
 
 public class ExecutionTimeHelper {
-    private static ExecutionGraph graph;
+    private static ExTree exTree;
     private static ServiceAST service;
 
     public ExecutionTimeHelper(String appName, String requestID){
-        graph = ExecutionGraphBuilder.getExecutionGraph(appName,requestID);
+        exTree = ExTree.builder()
+                .withAppName(appName)
+                .withRequestId(requestID)
+                .buildAndRetrieveExecutionTree();
+
         service = AstBuilder.getService(appName,requestID);
     }
 
@@ -25,9 +30,13 @@ public class ExecutionTimeHelper {
         List<ServiceAST> children =  service.getChildren();
         if(children.size() == 0){
             MethodAbs method = (MethodAbs) service;
-            List<String> calledMethods = graph.getMethodsCalledBy(method);
+            ExTree targetSubTree = getTree(method, exTree);
+            List<ExTree> calledMethods = targetSubTree.getChildren();
+            //replacement is traverse the root until you get node containing method
+            //then get its children
             Integer childrenExecutionTime = 0;
-            for(String calledMethodName: calledMethods){
+            for(ExTree tree: calledMethods){
+                String calledMethodName = tree.getMethod().getMethodAbs().getName();
                 MethodAbs calledMethod = service.getMethod(calledMethodName);
                 childrenExecutionTime += calledMethod.getExecusionTime();
 
@@ -39,6 +48,21 @@ public class ExecutionTimeHelper {
                 updateExecutionTime(service);
             }
         }
+
+    }
+
+    /*
+       Get the sub tree rooted at a node which contains method
+     */
+    private static ExTree getTree(MethodAbs method, ExTree graph) {
+        if(graph.getMethod().getMethodAbs().equals(method)){
+            return graph;
+        }
+
+        for(ExTree children: graph.getChildren()){
+            return getTree(method,children);
+        }
+        return new Empty();
 
     }
 

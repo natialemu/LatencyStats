@@ -3,10 +3,7 @@ package activity;
 import Request.LatencyStatsRequest;
 import domain.abstraction.ServiceAST;
 import domain.LatencyStatsFacade;
-import domain.builder.AstBuilder;
-import domain.builder.ExecutionGraphBuilder;
 import domain.builder.ExecutionTimeHelper;
-import domain.execution.ExecutionGraph;
 import org.springframework.http.ResponseEntity;
 
 public class ReportLogActivity {

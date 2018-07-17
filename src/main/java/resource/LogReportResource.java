@@ -6,22 +6,29 @@ import activity.ReportLogActivity;
 import domain.Constants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import validation.GetRequestValidator;
 
 @RestController
 @RequestMapping("/latency/logs")
 @Api(value="Latency Stats", basePath = "/latency/stats", description="Latency statistics messages")
 public class LogReportResource {
 
+    private final GetRequestValidator getRequestValidator;
+
     private final ReportLogActivity reportLogActivity;
 
     @Autowired
-    public LogReportResource(ReportLogActivity reportLogActivity){
+    public LogReportResource(ReportLogActivity reportLogActivity, GetRequestValidator getRequestValidator){
         this.reportLogActivity = reportLogActivity;
+        this.getRequestValidator = getRequestValidator;
     }
 
+    @ApiResponses(value={@ApiResponse(code=200, message="")})
     @RequestMapping(value = "/", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<?> getGeneralReport(
             @RequestHeader(value = Constants.HTTP_HEADER_RETURN_SUCCESS_FOR_MISSING_REPORT, required = false) boolean returnSuccessForMissingProperties,
@@ -33,6 +40,9 @@ public class LogReportResource {
         LatencyStatsRequest request = LatencyStatsRequestBuilder.buildRequest(appName,requestID,returnSuccessForMissingProperties);
         validateRequest(request);
 
+
+
+
         return reportLogActivity.getGeneralReport(request);
 
 
@@ -40,6 +50,7 @@ public class LogReportResource {
 
     private void validateRequest(LatencyStatsRequest request) {
 
+        //getRequestValidator.accept(request);
     }
 
 

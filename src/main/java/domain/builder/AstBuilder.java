@@ -1,22 +1,34 @@
 package domain.builder;
 
+import dal.LatencyDAO;
+import dal.LatencyDaoImpl;
+import domain.MethodBean;
 import domain.abstraction.*;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.List;
 import java.util.Scanner;
 
 public class AstBuilder {
+    private LatencyDAO latencyDAO;
 
-    private static final String LATENCY_LOG_FILE = "/Users/nalemu/Documents/EWE/dayaway/Logs/latency_log.csv";
+    public AstBuilder(){
+        latencyDAO = new LatencyDaoImpl();
+    }
 
-    public static ServiceAST getService(String appName, String requestID){
+
+    public  ServiceAST getService(String applicationName, String requestID){
+
+        List<MethodBean> methodBeanList=latencyDAO.getOrderedMethods(applicationName,requestID);
+
         ServiceAST serviceAST=null;
+
         /**
          * Use DAOs to get the neccessary data to build AST
          */
         try {
             File file =
-                    new File(LATENCY_LOG_FILE);
+                    new File("");
             Scanner sc = new Scanner(file);
             while (sc.hasNextLine()){
 
@@ -24,7 +36,7 @@ public class AstBuilder {
                 assert(currentLine.length == 3);
 
                 String[] methodSignature = currentLine[0].split(".");
-                String applicationName = currentLine[1];
+
 
                 if(serviceAST == null){
                     serviceAST = new ApplicationAbs();
