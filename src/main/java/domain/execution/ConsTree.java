@@ -37,4 +37,9 @@ public class ConsTree implements ExTree {
 
     }
 
+    @Override
+    public boolean hasChildren() {
+        return children.size() != 0;
+    }
+
 }

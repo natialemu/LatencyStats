@@ -1,5 +1,7 @@
 package domain.abstraction;
 
+import domain.builder.AstBuilder;
+
 import java.util.List;
 
 public interface ServiceAST {
@@ -21,4 +23,8 @@ public interface ServiceAST {
     MethodAbs getMethod(String calledMethodName);
 
     void setExecutionTime(int totalTime);
+
+    static AstBuilder builder(){
+        return new AstBuilder();
+    }
 }

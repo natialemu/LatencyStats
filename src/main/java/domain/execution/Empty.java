@@ -25,5 +25,10 @@ public class Empty implements ExTree {
 
     }
 
+    @Override
+    public boolean hasChildren() {
+        return false;
+    }
+
 
 }

@@ -17,6 +17,8 @@ public interface ExTree {
         return new ExecutionTreeBuilder();
     }
 
+    boolean hasChildren();
+
 
 
 }

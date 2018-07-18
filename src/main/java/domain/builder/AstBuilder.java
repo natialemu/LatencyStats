@@ -9,17 +9,32 @@ import java.util.List;
 public class AstBuilder {
     private LatencyDAO latencyDAO;
     private ServiceAST root;
+    private String requestID;
 
-    public AstBuilder(String applicationName){
+    public AstBuilder(){
         latencyDAO = new LatencyDaoImpl();
+
+
+    }
+
+    public AstBuilder withApplicationName(String applicationName){
+
         root = new ApplicationAbs(applicationName);
+        return this;
+
+    }
+
+    public AstBuilder withRequestID(String requestID){
+
+        this.requestID =requestID;
+        return this;
 
     }
 
 
-    public  ServiceAST getService(String applicationName, String requestID){
+    public  ServiceAST getService(){
 
-        List<MethodBean> methodBeanList=latencyDAO.getOrderedMethods(applicationName,requestID);
+        List<MethodBean> methodBeanList=latencyDAO.getOrderedMethods(root.getName(),requestID);
 
         for(MethodBean method: methodBeanList){
             String fullMethodDefinition = method.getMethodAbs().getName();
