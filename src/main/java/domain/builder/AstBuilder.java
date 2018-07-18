@@ -11,15 +11,25 @@ import java.util.Scanner;
 
 public class AstBuilder {
     private LatencyDAO latencyDAO;
+    private ServiceAST root;
 
-    public AstBuilder(){
+    public AstBuilder(String applicationName){
         latencyDAO = new LatencyDaoImpl();
+        root = new ApplicationAbs(applicationName);
+
     }
 
 
     public  ServiceAST getService(String applicationName, String requestID){
 
         List<MethodBean> methodBeanList=latencyDAO.getOrderedMethods(applicationName,requestID);
+
+        for(MethodBean method: methodBeanList){
+            String fullMethodDefinition = method.getMethodAbs().getName();
+            ServiceComponentBuilder builder = new ServiceComponentBuilder(fullMethodDefinition);
+            List<ServiceAST> components = builder.getComponents();
+            insertIntoApplication(components);
+        }
 
         ServiceAST serviceAST=null;
 
@@ -50,6 +60,10 @@ public class AstBuilder {
             fnfe.printStackTrace();
         }
         return serviceAST;
+    }
+
+    private void insertIntoApplication(List<ServiceAST> components) {
+        //TODO
     }
 
     private static ClassAbs parseClass(String currentPackageName, ServiceAST parent, String simpleclassName, ServiceAST serviceAST){

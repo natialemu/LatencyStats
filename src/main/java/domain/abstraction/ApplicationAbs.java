@@ -8,6 +8,17 @@ public class ApplicationAbs implements ServiceAST {
     private String applicationName;
     private int executionTime;
 
+    public ApplicationAbs(String applicationName){
+        this.applicationName = applicationName;
+
+    }
+    public ApplicationAbs(String applicationName, int executionTime){
+        this.applicationName = applicationName;
+        this.executionTime = executionTime;
+
+    }
+
+
 
     @Override
     public void add(ServiceAST abstraction) {
