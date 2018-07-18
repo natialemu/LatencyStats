@@ -25,60 +25,33 @@ public class ExecutionTimeHelper {
         service = ServiceAST.builder()
                 .withApplicationName(appName)
                 .getService();
+
+        correctExecutiontime(service);
     }
 
 
-    public ServiceAST getTimeAdjustedService(){
-        correctExecutiontime(service);
+    public ServiceAST getService(){
         return service;
     }
 
     private static void correctExecutiontime(ServiceAST service) {
-        //TODO
-        List<ServiceAST> children =  service.getChildren();
-        if(children.size() == 0){
-            MethodAbs method = (MethodAbs) service;
-            ExTree targetSubTree = getTree(method, exTree);
-            List<ExTree> calledMethods = targetSubTree.getChildren();
-            //replacement is traverse the root until you get node containing method
-            //then get its children
-            Integer childrenExecutionTime = 0;
-            for(ExTree tree: calledMethods){
-                String calledMethodName = tree.getMethod().getMethodAbs().getName();
-                MethodAbs calledMethod = service.getMethod(calledMethodName);
-                childrenExecutionTime += calledMethod.getExecusionTime();
 
-            }
-            method.setExecutionTime(method.getExecusionTime() - childrenExecutionTime);
-        }else{
-            for(ServiceAST child : children){
-                correctExecutiontime(child);
-                updateExecutionTime(service);
-            }
+        if(service instanceof MethodAbs){
+            long exTime = executionTimeRetriever.retrieveExecutionTime((MethodAbs) service);
+            service.setExecutionTime(exTime);
+            return;
         }
+        long overallComponentTime = 0;
+
+        for(ServiceAST component: service.getChildren()){
+
+            correctExecutiontime(component);
+            overallComponentTime += component.getExecusionTime();
+
+        }
+
+        service.setExecutionTime(overallComponentTime);
 
     }
 
-    /*
-       Get the sub tree rooted at a node which contains method
-     */
-    private static ExTree getTree(MethodAbs method, ExTree graph) {
-        if(graph.getMethod().getMethodAbs().equals(method)){
-            return graph;
-        }
-
-        for(ExTree children: graph.getChildren()){
-            return getTree(method,children);
-        }
-        return new Empty();
-
-    }
-
-    private static void updateExecutionTime(ServiceAST service) {
-        int totalTime = 0;
-        for(ServiceAST serviceAST: service.getChildren()){
-            totalTime += serviceAST.getExecusionTime();
-        }
-        service.setExecutionTime(totalTime);
-    }
 }

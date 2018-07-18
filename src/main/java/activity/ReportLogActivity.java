@@ -10,20 +10,32 @@ public class ReportLogActivity {
 
     public ResponseEntity<?> getGeneralReport(LatencyStatsRequest request) {
 
-        String appName = request.getBody().getAppName();
-        String requestId = request.getBody().getAppName();
-
-        ExecutionTimeHelper helper = new ExecutionTimeHelper(appName,requestId);
-        ServiceAST service = helper.getTimeAdjustedService();
-
-        LatencyStatsFacade latencyStats = new LatencyStatsFacade(service);
-
         //build a response out of results from the facade
+        LatencyStatsFacade statsFacade = getLatencyStatsFacade(request);
 
         return null;
     }
 
+    public LatencyStatsFacade getLatencyStatsFacade(LatencyStatsRequest request){
+
+        String appName = request.getBody().getAppName();
+        String requestId = request.getBody().getAppName();
+
+        ExecutionTimeHelper helper = new ExecutionTimeHelper(appName,requestId);
+        ServiceAST service = helper.getService();
+
+        LatencyStatsFacade latencyStats = new LatencyStatsFacade(service);
+        return latencyStats;
+
+
+
+
+    }
+
     public ResponseEntity<?> getExhaustiveReport(LatencyStatsRequest request) {
+
+        LatencyStatsFacade statsFacade = getLatencyStatsFacade(request);
+
         return null;
     }
     /**

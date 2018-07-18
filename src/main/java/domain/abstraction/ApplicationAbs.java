@@ -6,7 +6,7 @@ public class ApplicationAbs implements ServiceAST {
 
     private List<ServiceAST> abstractions;
     private String applicationName;
-    private int executionTime;
+    private long executionTime;
 
     public ApplicationAbs(String applicationName){
         this.applicationName = applicationName;
@@ -31,7 +31,7 @@ public class ApplicationAbs implements ServiceAST {
     }
 
     @Override
-    public int getExecusionTime() {
+    public long getExecusionTime() {
         return 0;
     }
 
@@ -101,7 +101,7 @@ public class ApplicationAbs implements ServiceAST {
     }
 
     @Override
-    public void setExecutionTime(int totalTime) {
+    public void setExecutionTime(long totalTime) {
 
         executionTime = totalTime;
     }

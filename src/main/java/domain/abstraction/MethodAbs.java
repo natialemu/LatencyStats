@@ -10,7 +10,7 @@ public class MethodAbs implements ServiceAST {
 
 
     private String methodName;
-    private int executionTime;
+    private long executionTime;
     private ExecutionGraph executionGraph;
 
     public MethodAbs(){
@@ -28,7 +28,7 @@ public class MethodAbs implements ServiceAST {
     }
 
     @Override
-    public void setExecutionTime(int executionTime) {
+    public void setExecutionTime(long executionTime) {
         this.executionTime = executionTime;
     }
 
@@ -49,7 +49,7 @@ public class MethodAbs implements ServiceAST {
     }
 
     @Override
-    public int getExecusionTime() {
+    public long getExecusionTime() {
 
         return executionTime;
     }

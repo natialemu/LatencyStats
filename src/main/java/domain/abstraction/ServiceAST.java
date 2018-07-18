@@ -7,7 +7,7 @@ import java.util.List;
 public interface ServiceAST {
     void add(ServiceAST abstraction);
     void getAbstractionInformation();//adjust the return type
-    int getExecusionTime();
+    long getExecusionTime();
     int getSize();
     MethodAbs getSlowestMethod();
     List<MethodAbs> getNSlowestMethods(int n);
@@ -22,7 +22,7 @@ public interface ServiceAST {
 
     MethodAbs getMethod(String calledMethodName);
 
-    void setExecutionTime(int totalTime);
+    void setExecutionTime(long totalTime);
 
     static AstBuilder builder(){
         return new AstBuilder();

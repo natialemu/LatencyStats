@@ -5,11 +5,12 @@ import java.util.List;
 public class PackageAbs implements ServiceAST {
 
     private List<ServiceAST> abstractions;
-    private String applicationName;
-    private int executionTime;
+    private String packageName;
+    private long executionTime;
 
     @Override
     public void add(ServiceAST abstraction) {
+        abstractions.add(abstraction);
 
     }
 
@@ -19,13 +20,13 @@ public class PackageAbs implements ServiceAST {
     }
 
     @Override
-    public int getExecusionTime() {
-        return 0;
+    public long getExecusionTime() {
+        return executionTime;
     }
 
     @Override
     public int getSize() {
-        return 0;
+        return abstractions.size();
     }
 
     @Override
@@ -55,16 +56,17 @@ public class PackageAbs implements ServiceAST {
 
     @Override
     public String getName() {
-        return null;
+        return packageName;
     }
 
     @Override
     public void setName(String name) {
+        this.packageName = name;
     }
 
     @Override
     public boolean contains(ServiceAST serviceAST) {
-        return false;
+        return abstractions.contains(serviceAST);
     }
 
     @Override
@@ -83,7 +85,7 @@ public class PackageAbs implements ServiceAST {
     }
 
     @Override
-    public void setExecutionTime(int totalTime) {
+    public void setExecutionTime(long totalTime) {
         executionTime = totalTime;
     }
 }
