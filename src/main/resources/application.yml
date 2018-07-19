@@ -10,7 +10,9 @@ server:
     max-threads: 10
     remote-ip-header: x-forwarded-for
     protocol-header: x-forwarded-proto
-  port: 8443
+  port: 8084
+  additionalHttpPorts: 8443
+
 
 spring.datasource:
   url: "jdbc:mysql://latencystatsdb.cedako7zoc64.us-west-2.rds.amazonaws.com:3306/LatancyStatsServiceDB"

@@ -8,9 +8,11 @@ import com.latency.stats.domain.builder.ExecutionTimeHelper;
 import org.springframework.http.ResponseEntity;
 import com.latency.stats.representation.GeneralReport;
 import com.latency.stats.representation.stats.mini.MethodStatsMini;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class ReportLogActivity {
 
     public ResponseEntity<?> getGeneralReport(LatencyStatsRequest request) {

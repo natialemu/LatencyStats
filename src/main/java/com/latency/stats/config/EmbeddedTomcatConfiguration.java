@@ -12,7 +12,7 @@ import java.util.List;
 
 public class EmbeddedTomcatConfiguration {
 
-    @Value("${server.port}")
+    @Value("${server.additionalHttpPorts}")
     private String additionalPorts;
 
     @Bean

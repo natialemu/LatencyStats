@@ -31,12 +31,7 @@ public class ApplicationConfiguration implements InitializingBean {
         return builder;
     }
 
-    @Bean
-    public HystrixCodaHaleMetricsPublisher hystrixCodaHaleMetricsPublisher(MetricRegistry metricRegistry) {
-        final HystrixCodaHaleMetricsPublisher publisher = new HystrixCodaHaleMetricsPublisher(metricRegistry);
-        HystrixPlugins.getInstance().registerMetricsPublisher(publisher);
-        return publisher;
-    }
+
 
 }
 
