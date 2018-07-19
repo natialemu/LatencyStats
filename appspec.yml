@@ -1,0 +1,8 @@
+
+files:
+
+
+hooks:
+   BeforeInstall:
+
+   ApplicationStop:
