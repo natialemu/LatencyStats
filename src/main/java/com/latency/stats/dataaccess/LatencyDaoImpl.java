@@ -1,4 +1,4 @@
-package com.latency.stats.dal;
+package com.latency.stats.dataaccess;
 
 import com.latency.stats.domain.MethodBean;
 

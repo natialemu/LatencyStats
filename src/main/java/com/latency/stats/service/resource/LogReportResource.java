@@ -1,8 +1,10 @@
-package com.latency.stats.resource;
+package com.latency.stats.service.resource;
 
-import com.latency.stats.Request.LatencyStatsRequest;
-import com.latency.stats.Request.LatencyStatsRequestBuilder;
-import com.latency.stats.activity.ReportLogActivity;
+import com.latency.stats.service.representation.request.methodlog.MethodLogRequest;
+import com.latency.stats.service.representation.request.methodlog.MethodLogRequestBuilder;
+import com.latency.stats.service.representation.request.stats.LatencyStatsRequest;
+import com.latency.stats.service.representation.request.stats.LatencyStatsRequestBuilder;
+import com.latency.stats.service.activity.ReportLogActivity;
 import com.latency.stats.domain.Constants;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
@@ -79,17 +81,47 @@ public class LogReportResource {
         return null;
 
     }
-    @RequestMapping(value = "/app", consumes = "application/json", method = RequestMethod.POST)
-    public ResponseEntity<?> createCompleteLogPerRequest(){
+    @RequestMapping(value = "/{appname}/{requestid}", consumes = "application/json", method = RequestMethod.POST)
+    public ResponseEntity<?> createCompleteLogPerRequest(
+            @PathVariable("appname") String appName,
+            @PathVariable("requestid") String requestId,
+            @RequestParam("methodname") String fullBeforeMethodName,
+            @RequestParam("starttime") long calledMethodStartTime,
+            @RequestParam("endtime") long calledMethodEndTime,
+            @RequestParam("startrank") int stackPushRank,
+            @RequestParam("endrank") int stackPopRank
+
+    ){
+
+        MethodLogRequest request = MethodLogRequestBuilder.buildRequest(appName,requestId,fullBeforeMethodName,calledMethodStartTime,calledMethodEndTime,
+                stackPushRank,stackPopRank);
+
+        validateAndProcessLogRequest(request);
+
+
         /**
          * JSON data will be in the following structure:
          * a list of the following
          *     <Full method definition>:
          *              stackPushOrder:
-         *              stackPopOrer:
+         *
+         *
+         *              @PathVariable("appname") String appName,
+         *                                      @PathVariable("requestid") String requestId,
+         *                                      @RequestParam("methodname") String fullBeforeMethodName,
+         *                                      @RequestParam("starttime") long calledMethodStartTime,
+         *                                      @RequestParam("endtime") long calledMethodEndTime,
+         *                                      @RequestParam("startrank") int stackPushRank,
+         *                                      @RequestParam("endrank") int stackPopRank
          */
 
         return null;
+    }
+
+    private void validateAndProcessLogRequest(MethodLogRequest request) {
+        //call appropriate method
+
+        reportLogActivity.processMethodLogRequest(request);
     }
 
     @RequestMapping(value = "/method/", consumes = "application/json", method = RequestMethod.PUT)

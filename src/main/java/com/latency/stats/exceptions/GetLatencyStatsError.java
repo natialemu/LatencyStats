@@ -1,8 +1,6 @@
-package com.latency.stats.validation;
+package com.latency.stats.exceptions;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 

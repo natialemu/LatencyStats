@@ -1,13 +1,14 @@
-package com.latency.stats.activity;
+package com.latency.stats.service.activity;
 
-import com.latency.stats.Request.LatencyStatsRequest;
+import com.latency.stats.service.representation.request.methodlog.MethodLogRequest;
+import com.latency.stats.service.representation.request.stats.LatencyStatsRequest;
 import com.latency.stats.domain.abstraction.MethodAbs;
 import com.latency.stats.domain.abstraction.ServiceAST;
 import com.latency.stats.domain.LatencyStatsFacade;
 import com.latency.stats.domain.builder.ExecutionTimeHelper;
 import org.springframework.http.ResponseEntity;
-import com.latency.stats.representation.GeneralReport;
-import com.latency.stats.representation.stats.mini.MethodStatsMini;
+import com.latency.stats.service.representation.response.GeneralReport;
+import com.latency.stats.service.representation.response.stats.mini.MethodStatsMini;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -68,6 +69,10 @@ public class ReportLogActivity {
         LatencyStatsFacade statsFacade = getLatencyStatsFacade(request);
 
         return null;
+    }
+
+    public void processMethodLogRequest(MethodLogRequest request) {
+        //send it to Domain & DAOs to store this to db
     }
     /**
      *

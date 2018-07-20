@@ -1,4 +1,4 @@
-package com.latency.stats.representation.stats.mini;
+package com.latency.stats.service.representation.response.stats.mini;
 
 import lombok.Getter;
 import lombok.Setter;

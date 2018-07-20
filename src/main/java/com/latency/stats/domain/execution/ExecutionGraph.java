@@ -1,6 +1,6 @@
 package com.latency.stats.domain.execution;
 
-import com.latency.stats.dal.LatencyDAO;
+import com.latency.stats.dataaccess.LatencyDAO;
 
 public class ExecutionGraph {
 

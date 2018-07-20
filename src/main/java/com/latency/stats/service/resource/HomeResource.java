@@ -1,4 +1,4 @@
-package com.latency.stats.resource;
+package com.latency.stats.service.resource;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

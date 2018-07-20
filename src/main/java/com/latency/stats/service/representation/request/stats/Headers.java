@@ -1,4 +1,4 @@
-package com.latency.stats.Request;
+package com.latency.stats.service.representation.request.stats;
 
 public class Headers {
     private boolean returnSuccessForMissingReport;
