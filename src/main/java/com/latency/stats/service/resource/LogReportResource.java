@@ -6,10 +6,9 @@ import com.latency.stats.service.representation.request.stats.LatencyStatsReques
 import com.latency.stats.service.representation.request.stats.LatencyStatsRequestBuilder;
 import com.latency.stats.service.activity.ReportLogActivity;
 import com.latency.stats.domain.Constants;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import com.latency.stats.service.representation.response.ExhaustiveReport;
+import com.latency.stats.service.representation.response.GeneralReport;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,7 @@ import com.latency.stats.validation.GetRequestValidator;
 
 @RestController
 @RequestMapping("/latency/logs")
-@Api(value="Latency Stats", basePath = "/latency/stats", description="Latency statistics messages")
+@Api(value="Latency Stats", basePath = "/latency/logs", description="Latency statistics messages")
 public class LogReportResource {
 
     private final GetRequestValidator getRequestValidator;
@@ -30,8 +29,8 @@ public class LogReportResource {
         this.getRequestValidator = getRequestValidator;
     }
 
-    @ApiResponses(value={@ApiResponse(code=200, message="")})
-    @RequestMapping(value = "/", produces = "application/json", method = RequestMethod.GET)
+    @ApiOperation(value = "Get general report for a request", response = GeneralReport.class)
+    @RequestMapping(value = "/{"+Constants.APP_ID+"}/{"+Constants.REQUEST_ID+"}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<?> getGeneralReport(
             @RequestHeader(value = Constants.HTTP_HEADER_RETURN_SUCCESS_FOR_MISSING_REPORT, required = false) boolean returnSuccessForMissingProperties,
             @ApiParam(value = Constants.APP_ID, required = true) @PathVariable(Constants.APP_ID) String appName,
@@ -56,7 +55,8 @@ public class LogReportResource {
     }
 
 
-    @RequestMapping(value = "/fullReport" + Constants.REQUEST_ID + "}", produces = "application/json", method = RequestMethod.GET)
+    @ApiOperation(value = "Get Exhaustive report for a request", response = ExhaustiveReport.class)
+    @RequestMapping(value = "/fullReport/{" + Constants.REQUEST_ID + "}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<?> getExhaustiveReport(
 
             @RequestHeader(value = Constants.HTTP_HEADER_RETURN_SUCCESS_FOR_MISSING_REPORT, required = false) boolean returnSuccessForMissingProperties,

@@ -19,3 +19,13 @@ spring.datasource:
   username: "nathnael2"
   password: "NatMysql_AWS_19"
 
+swagger:
+  service:
+    version: "1.0"
+    title: ${application.name}
+    description: "Latency Stats Service"
+    termsPath: ""
+    email: "nalemu@expedia.com"
+    licenceType: ""
+    licencePath: ""
+

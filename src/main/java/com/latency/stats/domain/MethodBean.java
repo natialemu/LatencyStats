@@ -10,7 +10,7 @@ public class MethodBean implements Comparable{
     private MethodAbs methodAbs;
     private long overallExecutionTime;
     private boolean pushedOntoStack;
-    private boolean stackRank;
+    private Integer stackRank;
 
     public MethodAbs getMethodAbs() {
         return methodAbs;
@@ -50,17 +50,20 @@ public class MethodBean implements Comparable{
         return Objects.hash(methodAbs);
     }
 
-    public boolean isStackRank() {
+    public Integer getStackRank() {
         return stackRank;
 
     }
 
-    public void setStackRank(boolean stackRank) {
+    public void setStackRank(Integer stackRank) {
         this.stackRank = stackRank;
     }
 
     @Override
     public int compareTo(Object o) {
-        return 0;//TODO
+
+        MethodBean otherBean = (MethodBean)o;
+        return stackRank.compareTo(otherBean.getStackRank());
+
     }
 }
