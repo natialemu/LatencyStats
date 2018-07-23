@@ -1,7 +1,6 @@
 package com.latency.stats.domain.builder;
 
 import com.latency.stats.dataaccess.LatencyDAO;
-import com.latency.stats.dataaccess.LatencyDaoImpl;
 import com.latency.stats.domain.MethodBean;
 import com.latency.stats.domain.execution.ConsTree;
 import com.latency.stats.domain.execution.Empty;
@@ -22,7 +21,7 @@ public class ExecutionTreeBuilder {
 
     public ExecutionTreeBuilder(){
         root = new Empty();
-        latencyDAO = new LatencyDaoImpl();
+        latencyDAO = new LatencyDAO();
         executionTimeRetriever = new TrueExecutionTimeRetriever();
     }
 

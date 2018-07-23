@@ -3,17 +3,21 @@ package com.latency.stats.dataaccess.entity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
-public class MethodEntity implements Serializable {
+@Table(
+        name = "method_desc"
+)
+public class MethodEntity {
 
     @Id
     @Column(
             name = "request_id"
     )
-    private long requestID;
+    private Long requestID;
 
     @Column(
             name = "app_name"
@@ -28,47 +32,59 @@ public class MethodEntity implements Serializable {
     @Column(
             name = "stack_pop_rank"
     )
-    private int stackPopRank;
+    private Integer stackPopRank;
 
     @Column(
             name = "stack_push_rank"
     )
-    private int stackPushRank;
+    private Integer stackPushRank;
 
     @Column(
             name = "stack_pop_time"
     )
-    private int stackPopTime;
+    private Integer stackPopTime;
 
     @Column(
             name = "stack_push_time"
     )
-    private int stackPushTime;
+    private Integer stackPushTime;
 
     @Column(
             name = "avg_method_runtime"
     )
-    private long avgMethodRuntime;
+    private Long avgMethodRuntime;
 
     @Column(
             name = "execution_count_per_request"
     )
-    private int numCallsPerRequest;
+    private Integer numCallsPerRequest;
 
     @Column(
             name = "is_normal_request"
     )
-    private boolean isNormalRequest;
+    private Boolean isNormalRequest;
 
-    public MethodEntity(long requestID) {
+    protected MethodEntity() {}
+
+
+    public MethodEntity(Long requestID, String appName, String methodName, Integer stackPopRank, Integer stackPushRank, Integer stackPopTime, Integer stackPushTime, Long avgMethodRuntime, Integer numCallsPerRequest, Boolean isNormalRequest) {
         this.requestID = requestID;
+        this.appName = appName;
+        this.methodName = methodName;
+        this.stackPopRank = stackPopRank;
+        this.stackPushRank = stackPushRank;
+        this.stackPopTime = stackPopTime;
+        this.stackPushTime = stackPushTime;
+        this.avgMethodRuntime = avgMethodRuntime;
+        this.numCallsPerRequest = numCallsPerRequest;
+        this.isNormalRequest = isNormalRequest;
     }
 
-    public long getRequestID() {
+    public Long getRequestID() {
         return requestID;
     }
 
-    public void setRequestID(long requestID) {
+    public void setRequestID(Long requestID) {
         this.requestID = requestID;
     }
 
@@ -88,82 +104,82 @@ public class MethodEntity implements Serializable {
         this.methodName = methodName;
     }
 
-    public int getStackPopRank() {
+    public Integer getStackPopRank() {
         return stackPopRank;
     }
 
-    public void setStackPopRank(int stackPopRank) {
+    public void setStackPopRank(Integer stackPopRank) {
         this.stackPopRank = stackPopRank;
     }
 
-    public int getStackPushRank() {
+    public Integer getStackPushRank() {
         return stackPushRank;
     }
 
-    public void setStackPushRank(int stackPushRank) {
+    public void setStackPushRank(Integer stackPushRank) {
         this.stackPushRank = stackPushRank;
     }
 
-    public int getStackPopTime() {
+    public Integer getStackPopTime() {
         return stackPopTime;
     }
 
-    public void setStackPopTime(int stackPopTime) {
+    public void setStackPopTime(Integer stackPopTime) {
         this.stackPopTime = stackPopTime;
     }
 
-    public int getStackPushTime() {
+    public Integer getStackPushTime() {
         return stackPushTime;
     }
 
-    public void setStackPushTime(int stackPushTime) {
+    public void setStackPushTime(Integer stackPushTime) {
         this.stackPushTime = stackPushTime;
     }
 
-    public long getAvgMethodRuntime() {
+    public Long getAvgMethodRuntime() {
         return avgMethodRuntime;
     }
 
-    public void setAvgMethodRuntime(long avgMethodRuntime) {
+    public void setAvgMethodRuntime(Long avgMethodRuntime) {
         this.avgMethodRuntime = avgMethodRuntime;
     }
 
-    public int getNumCallsPerRequest() {
+    public Integer getNumCallsPerRequest() {
         return numCallsPerRequest;
     }
 
-    public void setNumCallsPerRequest(int numCallsPerRequest) {
+    public void setNumCallsPerRequest(Integer numCallsPerRequest) {
         this.numCallsPerRequest = numCallsPerRequest;
     }
 
-    public boolean isNormalRequest() {
+    public Boolean isNormalRequest() {
         return isNormalRequest;
     }
 
-    public void setNormalRequest(boolean normalRequest) {
+    public void setNormalRequest(Boolean normalRequest) {
         isNormalRequest = normalRequest;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MethodEntity that = (MethodEntity) o;
-        return requestID == that.requestID &&
-                stackPopRank == that.stackPopRank &&
-                stackPushRank == that.stackPushRank &&
-                stackPopTime == that.stackPopTime &&
-                stackPushTime == that.stackPushTime &&
-                avgMethodRuntime == that.avgMethodRuntime &&
-                numCallsPerRequest == that.numCallsPerRequest &&
-                isNormalRequest == that.isNormalRequest &&
-                Objects.equals(appName, that.appName) &&
-                Objects.equals(methodName, that.methodName);
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(requestID, appName, methodName, stackPopRank, stackPushRank, stackPopTime, stackPushTime, avgMethodRuntime, numCallsPerRequest, isNormalRequest);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        MethodEntity that = (MethodEntity) o;
+//        return requestID == that.requestID &&
+//                stackPopRank == that.stackPopRank &&
+//                stackPushRank == that.stackPushRank &&
+//                stackPopTime == that.stackPopTime &&
+//                stackPushTime == that.stackPushTime &&
+//                avgMethodRuntime == that.avgMethodRuntime &&
+//                numCallsPerRequest == that.numCallsPerRequest &&
+//                isNormalRequest == that.isNormalRequest &&
+//                Objects.equals(appName, that.appName) &&
+//                Objects.equals(methodName, that.methodName);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//
+//        return Objects.hash(requestID, appName, methodName, stackPopRank, stackPushRank, stackPopTime, stackPushTime, avgMethodRuntime, numCallsPerRequest, isNormalRequest);
+//    }
 }

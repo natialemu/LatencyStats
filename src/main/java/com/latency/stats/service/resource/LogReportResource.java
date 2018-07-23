@@ -9,6 +9,7 @@ import com.latency.stats.domain.Constants;
 import com.latency.stats.service.representation.response.ExhaustiveReport;
 import com.latency.stats.service.representation.response.GeneralReport;
 import io.swagger.annotations.*;
+import org.apache.tomcat.util.bcel.Const;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,7 +57,7 @@ public class LogReportResource {
 
 
     @ApiOperation(value = "Get Exhaustive report for a request", response = ExhaustiveReport.class)
-    @RequestMapping(value = "/fullReport/{" + Constants.REQUEST_ID + "}", produces = "application/json", method = RequestMethod.GET)
+    @RequestMapping(value = "/fullReport/{" + Constants.APP_ID + "}/{"+Constants.APP_ID+"}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<?> getExhaustiveReport(
 
             @RequestHeader(value = Constants.HTTP_HEADER_RETURN_SUCCESS_FOR_MISSING_REPORT, required = false) boolean returnSuccessForMissingProperties,

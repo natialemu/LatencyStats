@@ -1,7 +1,6 @@
 package com.latency.stats.domain.builder;
 
 import com.latency.stats.dataaccess.LatencyDAO;
-import com.latency.stats.dataaccess.LatencyDaoImpl;
 import com.latency.stats.domain.MethodBean;
 import com.latency.stats.domain.abstraction.*;
 import java.util.List;
@@ -12,7 +11,7 @@ public class AstBuilder {
     private String requestID;
 
     public AstBuilder(){
-        latencyDAO = new LatencyDaoImpl();
+        latencyDAO = new LatencyDAO();
 
 
     }

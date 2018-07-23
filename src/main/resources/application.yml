@@ -18,6 +18,9 @@ spring.datasource:
   url: "jdbc:mysql://latencystatsdb.cedako7zoc64.us-west-2.rds.amazonaws.com:3306/LatancyStatsServiceDB"
   username: "nathnael2"
   password: "NatMysql_AWS_19"
+  hikari:
+    connection-timeout: 60000
+    maximum-pool-size: 5
 
 swagger:
   service:
@@ -28,4 +31,10 @@ swagger:
     email: "nalemu@expedia.com"
     licenceType: ""
     licencePath: ""
+
+spring:
+    jpa:
+       databasePlatform: org.hibernate.dialect.MySQLDialect
+
+
 
