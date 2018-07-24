@@ -11,4 +11,9 @@ import java.util.Map;
 public class PackageStatsMini {
 
     private Map<String,Long> criticalPackages;
+
+
+    public void addCriticalPackages(String name, long execusionTime) {
+        criticalPackages.put(name,execusionTime);
+    }
 }

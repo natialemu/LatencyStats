@@ -5,12 +5,6 @@ import com.latency.stats.dataaccess.repository.LatencyStatsRepository;
 import com.latency.stats.domain.MethodBean;
 import com.latency.stats.domain.abstraction.MethodAbs;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,7 +37,7 @@ public class LatencyDAO {
             MethodBean endMethodBean = new MethodBean();
 
             MethodAbs methodAbs = new MethodAbs();
-            methodAbs.setMethodName(entity.getMethodName());
+            methodAbs.setName(entity.getMethodName());
             methodAbs.setExecutionTime(entity.getStackPopTime() - entity.getStackPushTime());
 
             callMethodBean.setMethodAbs(methodAbs);
@@ -60,15 +54,19 @@ public class LatencyDAO {
 
     }
 
+    public void saveMethod(MethodEntity entity){
+        if(latencyStatsRepository.countDistinctByAppNameAndRequestIDAndMethodName(entity.getAppName(),entity.getRequestID(),entity.getMethodName()) > 0){
+            //update the table so that these things are reflected:
+            //  1. appName, requestID, and methodName are joint primary keys
+            //  2. the data type of request id, and pop and push times needs to be changed
+            //get the entity's method called numbe and average runtime
+            //recalculate teh new values and set them in entity
 
-    /**
-     * Other methods we need:
-     *   1. method to save a single method:
-     *        check if it exists
-     *           if it does then only update
-     *           if not then create entry
-     *
-     *
-     */
+        }
+
+        latencyStatsRepository.save(entity);
+
+
+    }
 
 }

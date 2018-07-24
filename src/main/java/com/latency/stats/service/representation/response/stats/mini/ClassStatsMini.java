@@ -14,4 +14,11 @@ public class ClassStatsMini {
     private Map<String,Long> criticalClas; //if avg performace of all methods affected in class is above threshold
 
 
+    public void addSlowClass(String name, long execusionTime) {
+        tenPercSlowestClasses.put(name,execusionTime);
+    }
+
+    public void addCriticalClasses(String name, long execusionTime) {
+        criticalClas.put(name,execusionTime);
+    }
 }

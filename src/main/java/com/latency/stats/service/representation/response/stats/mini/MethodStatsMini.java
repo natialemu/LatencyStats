@@ -11,4 +11,12 @@ public class MethodStatsMini {
 
     private Map<String,Long> tenPercSlowestMethods;
     private Map<String,Long> criticalMethods;
+
+    public void addCriticalMethods(String methodName, long executionTime) {
+        criticalMethods.put(methodName, executionTime);
+    }
+
+    public void addSlowMethod(String methodName, long executionTime){
+        tenPercSlowestMethods.put(methodName, executionTime);
+    }
 }

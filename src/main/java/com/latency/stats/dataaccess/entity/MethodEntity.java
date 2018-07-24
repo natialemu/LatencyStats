@@ -42,12 +42,12 @@ public class MethodEntity {
     @Column(
             name = "stack_pop_time"
     )
-    private Integer stackPopTime;
+    private Long stackPopTime;
 
     @Column(
             name = "stack_push_time"
     )
-    private Integer stackPushTime;
+    private Long stackPushTime;
 
     @Column(
             name = "avg_method_runtime"
@@ -67,7 +67,7 @@ public class MethodEntity {
     protected MethodEntity() {}
 
 
-    public MethodEntity(Long requestID, String appName, String methodName, Integer stackPopRank, Integer stackPushRank, Integer stackPopTime, Integer stackPushTime, Long avgMethodRuntime, Integer numCallsPerRequest, Boolean isNormalRequest) {
+    public MethodEntity(Long requestID, String appName, String methodName, Integer stackPopRank, Integer stackPushRank, Long stackPopTime, Long stackPushTime, Long avgMethodRuntime, Integer numCallsPerRequest, Boolean isNormalRequest) {
         this.requestID = requestID;
         this.appName = appName;
         this.methodName = methodName;
@@ -78,6 +78,16 @@ public class MethodEntity {
         this.avgMethodRuntime = avgMethodRuntime;
         this.numCallsPerRequest = numCallsPerRequest;
         this.isNormalRequest = isNormalRequest;
+    }
+
+    public MethodEntity(Long requestID, String appName, String methodName, Integer stackPopRank, Integer stackPushRank, Long stackPopTime, Long stackPushTime) {
+        this.requestID = requestID;
+        this.appName = appName;
+        this.methodName = methodName;
+        this.stackPopRank = stackPopRank;
+        this.stackPushRank = stackPushRank;
+        this.stackPopTime = stackPopTime;
+        this.stackPushTime = stackPushTime;
     }
 
     public Long getRequestID() {
@@ -120,19 +130,19 @@ public class MethodEntity {
         this.stackPushRank = stackPushRank;
     }
 
-    public Integer getStackPopTime() {
+    public Long getStackPopTime() {
         return stackPopTime;
     }
 
-    public void setStackPopTime(Integer stackPopTime) {
+    public void setStackPopTime(Long stackPopTime) {
         this.stackPopTime = stackPopTime;
     }
 
-    public Integer getStackPushTime() {
+    public Long getStackPushTime() {
         return stackPushTime;
     }
 
-    public void setStackPushTime(Integer stackPushTime) {
+    public void setStackPushTime(Long stackPushTime) {
         this.stackPushTime = stackPushTime;
     }
 

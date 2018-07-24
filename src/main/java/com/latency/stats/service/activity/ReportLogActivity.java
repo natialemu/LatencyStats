@@ -1,11 +1,17 @@
 package com.latency.stats.service.activity;
 
+import com.latency.stats.dataaccess.LatencyDAO;
+import com.latency.stats.dataaccess.entity.MethodEntity;
+import com.latency.stats.domain.abstraction.ClassAbs;
+import com.latency.stats.domain.abstraction.PackageAbs;
 import com.latency.stats.service.representation.request.methodlog.MethodLogRequest;
 import com.latency.stats.service.representation.request.stats.LatencyStatsRequest;
 import com.latency.stats.domain.abstraction.MethodAbs;
 import com.latency.stats.domain.abstraction.ServiceAST;
 import com.latency.stats.domain.LatencyStatsFacade;
 import com.latency.stats.domain.builder.ExecutionTimeHelper;
+import com.latency.stats.service.representation.response.stats.mini.ClassStatsMini;
+import com.latency.stats.service.representation.response.stats.mini.PackageStatsMini;
 import org.springframework.http.ResponseEntity;
 import com.latency.stats.service.representation.response.GeneralReport;
 import com.latency.stats.service.representation.response.stats.mini.MethodStatsMini;
@@ -18,7 +24,6 @@ public class ReportLogActivity {
 
     public ResponseEntity<?> getGeneralReport(LatencyStatsRequest request) {
 
-        //build a response out of results from the facade
         LatencyStatsFacade statsFacade = getLatencyStatsFacade(request);
 
         GeneralReport generalReport = new GeneralReport();
@@ -32,19 +37,46 @@ public class ReportLogActivity {
     }
 
     private void setPackageStats(GeneralReport generalReport, LatencyStatsFacade statsFacade) {
+        PackageStatsMini packageStatsMini  = new PackageStatsMini();
+        List<PackageAbs> criticalPackages = statsFacade.getUnderPerformingPackages(10);
+
+
+        for(PackageAbs packagee: criticalPackages){
+            packageStatsMini.addCriticalPackages(packagee.getName(),packagee.getExecusionTime());
+        }
+        generalReport.setPackageStats(packageStatsMini);
 
     }
 
     private void setMethodStats(GeneralReport generalReport, LatencyStatsFacade statsFacade) {
         MethodStatsMini methodStatsMini  = new MethodStatsMini();
-        List<MethodAbs> methods = statsFacade.getNSlowestMethods(10);//10 percent
+        List<MethodAbs> slowestMethods = statsFacade.getNSlowestMethods(10);//10 percent
+        List<MethodAbs> criticalMethods = statsFacade.getUnderPerformingMethods(10);
 
-        //TODO: how do you get the critical methods
+        for(MethodAbs method: slowestMethods){
+            methodStatsMini.addSlowMethod(method.getName(),method.getExecusionTime());
+        }
+        for(MethodAbs method: criticalMethods){
+            methodStatsMini.addCriticalMethods(method.getName(),method.getExecusionTime());
+        }
+        generalReport.setMethodStats(methodStatsMini);
 
 
     }
 
     private void setClassStats(GeneralReport generalReport, LatencyStatsFacade statsFacade) {
+        ClassStatsMini classStatsMini = new ClassStatsMini();
+
+        List<ClassAbs> slowestClasses = statsFacade.getNSlowestClass(10);//10 percent
+        List<ClassAbs> criticalClasses = statsFacade.getUnderPerformingClasses(10);
+
+        for(ClassAbs clazz: slowestClasses){
+            classStatsMini.addSlowClass(clazz.getName(),clazz.getExecusionTime());
+        }
+        for(ClassAbs clazz: criticalClasses){
+            classStatsMini.addCriticalClasses(clazz.getName(),clazz.getExecusionTime());
+        }
+        generalReport.setClassStats(classStatsMini);
 
     }
 
@@ -73,6 +105,23 @@ public class ReportLogActivity {
 
     public void processMethodLogRequest(MethodLogRequest request) {
         //send it to Domain & DAOs to store this to db
+
+
+        /**
+         * Use options to set these values only if they are not null or -1
+         */
+        String appName = request.getMethodLogRequestBody().getAppName();
+        String requestId = request.getMethodLogRequestBody().getRequestId();
+        int stackPushRank = request.getMethodLogRequestBody().getPushStackRank();
+        int stackPopRank = request.getMethodLogRequestBody().getPopStackRank();
+        Long stackPushTime = request.getMethodLogRequestBody().getCalledMethodStartTime();
+        Long stackPopTime = request.getMethodLogRequestBody().getCalledMethodEndtime();
+        String methodName = request.getMethodLogRequestBody().getFullBeforeMethodName();
+
+        MethodEntity entity = new MethodEntity(Long.parseLong(requestId),appName,methodName,stackPopRank,stackPushRank,stackPopTime,stackPushTime);
+
+        LatencyStatsFacade statsFacade = new LatencyStatsFacade();
+        statsFacade.persistMethod(entity);
     }
     /**
      *

@@ -13,4 +13,9 @@ import java.util.List;
 public interface LatencyStatsRepository  extends CrudRepository<MethodEntity, Long> {
 
     List<MethodEntity> findAllByAppNameAndRequestID(String appName, long requestID);
+
+    Integer countDistinctByAppNameAndRequestIDAndMethodName(String appName,long requestID,String methodName);
+
+    MethodEntity save(MethodEntity methodEntity);
+
 }
