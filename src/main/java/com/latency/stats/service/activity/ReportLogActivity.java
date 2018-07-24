@@ -1,6 +1,5 @@
 package com.latency.stats.service.activity;
 
-import com.latency.stats.dataaccess.LatencyDAO;
 import com.latency.stats.dataaccess.entity.MethodEntity;
 import com.latency.stats.domain.abstraction.ClassAbs;
 import com.latency.stats.domain.abstraction.PackageAbs;
@@ -67,12 +66,8 @@ public class ReportLogActivity {
     private void setClassStats(GeneralReport generalReport, LatencyStatsFacade statsFacade) {
         ClassStatsMini classStatsMini = new ClassStatsMini();
 
-        List<ClassAbs> slowestClasses = statsFacade.getNSlowestClass(10);//10 percent
         List<ClassAbs> criticalClasses = statsFacade.getUnderPerformingClasses(10);
 
-        for(ClassAbs clazz: slowestClasses){
-            classStatsMini.addSlowClass(clazz.getName(),clazz.getExecusionTime());
-        }
         for(ClassAbs clazz: criticalClasses){
             classStatsMini.addCriticalClasses(clazz.getName(),clazz.getExecusionTime());
         }
@@ -91,9 +86,6 @@ public class ReportLogActivity {
         LatencyStatsFacade latencyStats = new LatencyStatsFacade(service,Long.parseLong(requestId));
         return latencyStats;
 
-
-
-
     }
 
     public ResponseEntity<?> getExhaustiveReport(LatencyStatsRequest request) {
@@ -104,9 +96,6 @@ public class ReportLogActivity {
     }
 
     public void processMethodLogRequest(MethodLogRequest request) {
-        //send it to Domain & DAOs to store this to db
-
-
         /**
          * Use options to set these values only if they are not null or -1
          */
@@ -123,16 +112,5 @@ public class ReportLogActivity {
         LatencyStatsFacade statsFacade = new LatencyStatsFacade(Long.parseLong(request.getMethodLogRequestBody().getRequestId()));
         statsFacade.persistMethod(entity);
     }
-    /**
-     *
-     * This class will send the right info
-     * to the builders so that they can build
-     * the graph and run them
-     *
-     * This class will also send to the right class
-     * for querying the graphs once it is build
-     *
-     * it will then return the results to the caller
-     *
-     */
+
 }

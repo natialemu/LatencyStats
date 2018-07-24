@@ -1,20 +1,22 @@
 package com.latency.stats.domain.abstraction;
 
 import com.latency.stats.domain.execution.ExecutionGraph;
+import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MethodAbs implements ServiceAST {
+public class MethodAbs implements ServiceAST, Comparable {
 
     private String methodName;
-    private long executionTime;
+    private Long executionTime;
 
     public MethodAbs(){
 
     }
 
-    public MethodAbs(String methodName, int executionTime){
+    public MethodAbs(String methodName, long executionTime){
         this.methodName = methodName;
         this.executionTime = executionTime;
     }
@@ -48,4 +50,9 @@ public class MethodAbs implements ServiceAST {
         return new ArrayList<>();
     }
 
+    @Override
+    public int compareTo(Object o) {
+        MethodAbs other = (MethodAbs) o;
+        return executionTime.compareTo(other.getExecusionTime());
+    }
 }

@@ -4,10 +4,7 @@ import com.latency.stats.dataaccess.LatencyDAO;
 import com.latency.stats.dataaccess.entity.MethodEntity;
 import com.latency.stats.domain.abstraction.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class LatencyStatsFacade {
 
@@ -17,6 +14,7 @@ public class LatencyStatsFacade {
     private List<MethodAbs> criticalMethods;
     private List<ClassAbs> criticalClasses;
     private List<PackageAbs> criticalPackages;
+    private List<MethodAbs> slowestMethods;
     private long requestID;
 
     public long getRequestID() {
@@ -88,7 +86,11 @@ public class LatencyStatsFacade {
         if(root instanceof MethodAbs && methodIsCritical((MethodAbs)root)){
             criticalComponents.put(root,true);
             criticalMethods.add((MethodAbs)root);
-        }else{
+        }else if(root instanceof MethodAbs){
+            slowestMethods.add((MethodAbs)root);
+
+        }
+        else{
             boolean isCritical = false;
             for(ServiceAST child: root.getChildren()){
                 generateCriticalComponents(child);
@@ -123,11 +125,12 @@ public class LatencyStatsFacade {
     }
 
     public List<MethodAbs> getNSlowestMethods(int n) {
-        return null;
-    }
-
-    public List<ClassAbs> getNSlowestClass(int n) {
-        return null;
+        Collections.sort(slowestMethods);
+        List<MethodAbs> nSlowestMethods = new ArrayList<>();
+        for(int i =slowestMethods.size() - 1 ; i >= n; i--){
+            nSlowestMethods.add(slowestMethods.get(i));
+        }
+        return nSlowestMethods;
     }
 
 
