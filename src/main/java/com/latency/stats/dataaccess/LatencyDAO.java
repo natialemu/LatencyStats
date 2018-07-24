@@ -69,4 +69,9 @@ public class LatencyDAO {
 
     }
 
+    public long getAvgExecutionTime(MethodAbs root, long requestID) {
+
+        MethodEntity entity = latencyStatsRepository.getMethodEntitiesByMethodNameAndRequestID(root.getName(),requestID);
+        return entity.getAvgMethodRuntime();
+    }
 }

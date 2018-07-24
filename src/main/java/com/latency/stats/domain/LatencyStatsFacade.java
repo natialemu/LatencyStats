@@ -4,22 +4,122 @@ import com.latency.stats.dataaccess.LatencyDAO;
 import com.latency.stats.dataaccess.entity.MethodEntity;
 import com.latency.stats.domain.abstraction.*;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class LatencyStatsFacade {
 
     private ServiceAST service;
     private LatencyDAO latencyDAO;
+    private Map<ServiceAST,Boolean> criticalComponents;
+    private List<MethodAbs> criticalMethods;
+    private List<ClassAbs> criticalClasses;
+    private List<PackageAbs> criticalPackages;
+    private long requestID;
 
+    public long getRequestID() {
+        return requestID;
+    }
 
-    public LatencyStatsFacade(ServiceAST service){
+    public void setRequestID(long requestID) {
+        this.requestID = requestID;
+    }
+
+    public LatencyStatsFacade(ServiceAST service, long requestID){
         this.service = service;
+        latencyDAO = new LatencyDAO();
+        criticalComponents = new HashMap<>();
+        this.requestID = requestID;
+
+        criticalClasses = new ArrayList<>();
+        criticalMethods = new ArrayList<>();
+        criticalPackages = new ArrayList<>();
+        generateCriticalComponents();
 
     }
 
-    public LatencyStatsFacade(){
-        this.service = service;
+    public LatencyStatsFacade(long requestID){
 
+        latencyDAO = new LatencyDAO();
+        criticalComponents = new HashMap<>();
+        this.requestID = requestID;
+
+        criticalClasses = new ArrayList<>();
+        criticalMethods = new ArrayList<>();
+        criticalPackages = new ArrayList<>();
+        generateCriticalComponents();
+
+    }
+
+    public Map<ServiceAST, Boolean> getCriticalComponents() {
+        return criticalComponents;
+    }
+
+    public void setCriticalComponents(Map<ServiceAST, Boolean> criticalComponents) {
+        this.criticalComponents = criticalComponents;
+    }
+
+    public LatencyDAO getLatencyDAO() {
+        return latencyDAO;
+    }
+
+    public void setLatencyDAO(LatencyDAO latencyDAO) {
+        this.latencyDAO = latencyDAO;
+    }
+
+    public ServiceAST getService() {
+
+        return service;
+    }
+
+    public void setService(ServiceAST service) {
+        this.service = service;
+    }
+
+
+
+    private void generateCriticalComponents() {
+        generateCriticalComponents(service);
+    }
+
+    private void generateCriticalComponents(ServiceAST root) {
+        if(root instanceof MethodAbs && methodIsCritical((MethodAbs)root)){
+            criticalComponents.put(root,true);
+            criticalMethods.add((MethodAbs)root);
+        }else{
+            boolean isCritical = false;
+            for(ServiceAST child: root.getChildren()){
+                generateCriticalComponents(child);
+                if(criticalComponents.containsKey(child)){
+                    isCritical = true;
+                }
+            }
+            if(isCritical){
+                criticalComponents.put(root,true);
+                if(root instanceof MethodAbs){
+                    criticalMethods.add((MethodAbs) root);
+                }else if(root instanceof ClassAbs){
+                    criticalClasses.add((ClassAbs) root);
+
+                }else if(root instanceof PackageAbs){
+                    criticalPackages.add((PackageAbs) root);
+
+                }
+            }
+        }
+
+    }
+
+    private boolean methodIsCritical(MethodAbs root) {
+
+        long executionTime = root.getExecusionTime();
+        long avgExecutionTime = latencyDAO.getAvgExecutionTime((MethodAbs)root,requestID);
+        if(executionTime > avgExecutionTime){
+            return true;
+        }
+        return false;
     }
 
     public List<MethodAbs> getNSlowestMethods(int n) {
@@ -35,43 +135,15 @@ public class LatencyStatsFacade {
         LatencyDAO latencyDAO = new LatencyDAO();
         latencyDAO.saveMethod(methodEntity);
     }
-
-
-    /**
-     * There should be a way of returning result of all three methods below after one traversal of service on the way back
-     * @param i
-     * @return
-     */
     public List<MethodAbs> getUnderPerformingMethods(int i) {
-
-
-        //TODO
-        //Get 10 perc of methods that are performing lower than the average performace for that particular method in that app
-        /**
-         * go through the service:
-         *   when you reach a method:
-         *     ask dao to get that method info from db for avg performace
-         *     if so add it
-         *
-         */
-        return null;
-
+        return criticalMethods;
     }
 
     public List<ClassAbs> getUnderPerformingClasses(int i) {
-        /**
-         * TODO
-         * if a class contains any of the underperforming methods then send it back
-         */
-        return null;
+        return criticalClasses;
     }
 
     public List<PackageAbs> getUnderPerformingPackages(int i) {
-        /**
-         * TODO if package contains any of the underperforming classes then send it back
-         *
-         *
-         */
-        return null;
+        return criticalPackages;
     }
 }

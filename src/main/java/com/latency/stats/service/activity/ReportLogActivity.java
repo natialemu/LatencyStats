@@ -88,7 +88,7 @@ public class ReportLogActivity {
         ExecutionTimeHelper helper = new ExecutionTimeHelper(appName,requestId);
         ServiceAST service = helper.getService();
 
-        LatencyStatsFacade latencyStats = new LatencyStatsFacade(service);
+        LatencyStatsFacade latencyStats = new LatencyStatsFacade(service,Long.parseLong(requestId));
         return latencyStats;
 
 
@@ -120,7 +120,7 @@ public class ReportLogActivity {
 
         MethodEntity entity = new MethodEntity(Long.parseLong(requestId),appName,methodName,stackPopRank,stackPushRank,stackPopTime,stackPushTime);
 
-        LatencyStatsFacade statsFacade = new LatencyStatsFacade();
+        LatencyStatsFacade statsFacade = new LatencyStatsFacade(Long.parseLong(request.getMethodLogRequestBody().getRequestId()));
         statsFacade.persistMethod(entity);
     }
     /**

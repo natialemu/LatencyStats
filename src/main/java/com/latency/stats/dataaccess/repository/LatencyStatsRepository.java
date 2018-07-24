@@ -18,4 +18,6 @@ public interface LatencyStatsRepository  extends CrudRepository<MethodEntity, Lo
 
     MethodEntity save(MethodEntity methodEntity);
 
+    MethodEntity getMethodEntitiesByMethodNameAndRequestID(String methodName, long requestID);
+
 }
