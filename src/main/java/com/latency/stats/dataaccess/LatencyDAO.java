@@ -14,8 +14,6 @@ public class LatencyDAO {
     @Autowired
     private LatencyStatsRepository latencyStatsRepository;
 
-
-
     public List<MethodBean> getOrderedMethods(String requestID, String appName) {
 
         List<MethodEntity> methodEntities = latencyStatsRepository.findAllByAppNameAndRequestID(appName,Long.parseLong(requestID));
@@ -33,8 +31,8 @@ public class LatencyDAO {
 
         for(MethodEntity entity: methodEntities){
 
-            MethodBean callMethodBean = new MethodBean();
-            MethodBean endMethodBean = new MethodBean();
+            MethodBean callMethodBean = new MethodBean(); // openning methodBean
+            MethodBean endMethodBean = new MethodBean(); // closing methodBean
 
             MethodAbs methodAbs = new MethodAbs();
             methodAbs.setName(entity.getMethodName());
@@ -49,23 +47,21 @@ public class LatencyDAO {
             endMethodBean.setStackRank(entity.getStackPopRank());
             endMethodBean.setPushedOntoStack(false);
 
-
         }
 
     }
 
-    public void saveMethod(MethodEntity entity){
+    public void saveMethod(MethodEntity entity) {
         if(latencyStatsRepository.countDistinctByAppNameAndRequestIDAndMethodName(entity.getAppName(),entity.getRequestID(),entity.getMethodName()) > 0){
-            //update the table so that these things are reflected:
-            //  1. appName, requestID, and methodName are joint primary keys
-            //  2. the data type of request id, and pop and push times needs to be changed
-            //get the entity's method called numbe and average runtime
-            //recalculate teh new values and set them in entity
-
+            MethodEntity preUpdateEntity = latencyStatsRepository.getMethodEntitiesByMethodNameAndRequestID(entity.getMethodName(),entity.getRequestID());
+            long preUpdateAvgRumtime = preUpdateEntity.getAvgMethodRuntime();
+            entity.setOverallNumCalls(preUpdateEntity.getOverallNumCalls() + 1);
+            long newAvgRuntime = preUpdateAvgRumtime*preUpdateEntity.getOverallNumCalls()/(entity.getOverallNumCalls());
+            entity.setNumCallsPerRequest(entity.getNumCallsPerRequest() + 1);
+            entity.setAvgMethodRuntime(newAvgRuntime);
         }
 
         latencyStatsRepository.save(entity);
-
 
     }
 

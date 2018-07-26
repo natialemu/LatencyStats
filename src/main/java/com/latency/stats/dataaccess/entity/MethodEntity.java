@@ -19,11 +19,13 @@ public class MethodEntity {
     )
     private Long requestID;
 
+    @Id
     @Column(
             name = "app_name"
     )
     private String appName;
 
+    @Id
     @Column(
             name = "method_name"
     )
@@ -64,20 +66,20 @@ public class MethodEntity {
     )
     private Boolean isNormalRequest;
 
+    @Column(
+            name = "overall_num_calls"
+    )
+    private Long overallNumCalls;
+
+
+
     protected MethodEntity() {}
 
 
-    public MethodEntity(Long requestID, String appName, String methodName, Integer stackPopRank, Integer stackPushRank, Long stackPopTime, Long stackPushTime, Long avgMethodRuntime, Integer numCallsPerRequest, Boolean isNormalRequest) {
+    public MethodEntity(Long requestID, String appName, String methodName) {
         this.requestID = requestID;
         this.appName = appName;
         this.methodName = methodName;
-        this.stackPopRank = stackPopRank;
-        this.stackPushRank = stackPushRank;
-        this.stackPopTime = stackPopTime;
-        this.stackPushTime = stackPushTime;
-        this.avgMethodRuntime = avgMethodRuntime;
-        this.numCallsPerRequest = numCallsPerRequest;
-        this.isNormalRequest = isNormalRequest;
     }
 
     public MethodEntity(Long requestID, String appName, String methodName, Integer stackPopRank, Integer stackPushRank, Long stackPopTime, Long stackPushTime) {
@@ -170,26 +172,15 @@ public class MethodEntity {
         isNormalRequest = normalRequest;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        MethodEntity that = (MethodEntity) o;
-//        return requestID == that.requestID &&
-//                stackPopRank == that.stackPopRank &&
-//                stackPushRank == that.stackPushRank &&
-//                stackPopTime == that.stackPopTime &&
-//                stackPushTime == that.stackPushTime &&
-//                avgMethodRuntime == that.avgMethodRuntime &&
-//                numCallsPerRequest == that.numCallsPerRequest &&
-//                isNormalRequest == that.isNormalRequest &&
-//                Objects.equals(appName, that.appName) &&
-//                Objects.equals(methodName, that.methodName);
-//    }
-//
-//    @Override
-//    public int hashCode() {
-//
-//        return Objects.hash(requestID, appName, methodName, stackPopRank, stackPushRank, stackPopTime, stackPushTime, avgMethodRuntime, numCallsPerRequest, isNormalRequest);
-//    }
+    public Boolean getNormalRequest() {
+        return isNormalRequest;
+    }
+
+    public Long getOverallNumCalls() {
+        return overallNumCalls;
+    }
+
+    public void setOverallNumCalls(Long overallNumCalls) {
+        this.overallNumCalls = overallNumCalls;
+    }
 }

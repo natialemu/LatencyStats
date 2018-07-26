@@ -34,6 +34,7 @@ public class LatencyStatsFacade {
         criticalClasses = new ArrayList<>();
         criticalMethods = new ArrayList<>();
         criticalPackages = new ArrayList<>();
+        slowestMethods = new ArrayList<>();
         generateCriticalComponents();
 
     }
@@ -84,7 +85,7 @@ public class LatencyStatsFacade {
 
     private void generateCriticalComponents(ServiceAST root) {
         if(root instanceof MethodAbs && methodIsCritical((MethodAbs)root)){
-            criticalComponents.put(root,true);
+            criticalComponents.put(root,true); // for dp purposes
             criticalMethods.add((MethodAbs)root);
         }else if(root instanceof MethodAbs){
             slowestMethods.add((MethodAbs)root);
@@ -94,13 +95,13 @@ public class LatencyStatsFacade {
             boolean isCritical = false;
             for(ServiceAST child: root.getChildren()){
                 generateCriticalComponents(child);
-                if(criticalComponents.containsKey(child)){
+                if(criticalComponents.containsKey(child)){ // if at least one child is a critical component
                     isCritical = true;
                 }
             }
             if(isCritical){
                 criticalComponents.put(root,true);
-                if(root instanceof MethodAbs){
+                if(root instanceof MethodAbs){//TODO: remove this. This should not be possible
                     criticalMethods.add((MethodAbs) root);
                 }else if(root instanceof ClassAbs){
                     criticalClasses.add((ClassAbs) root);
@@ -117,7 +118,7 @@ public class LatencyStatsFacade {
     private boolean methodIsCritical(MethodAbs root) {
 
         long executionTime = root.getExecusionTime();
-        long avgExecutionTime = latencyDAO.getAvgExecutionTime((MethodAbs)root,requestID);
+        long avgExecutionTime = latencyDAO.getAvgExecutionTime(root,requestID);
         if(executionTime > avgExecutionTime){
             return true;
         }
@@ -139,14 +140,21 @@ public class LatencyStatsFacade {
         latencyDAO.saveMethod(methodEntity);
     }
     public List<MethodAbs> getUnderPerformingMethods(int i) {
-        return criticalMethods;
+        Collections.sort(criticalMethods);
+        List<MethodAbs> nCriticalMethods = new ArrayList<>();
+        int numMethodsToReturn = (int)((i/100.0)*criticalMethods.size());
+        for(int j =criticalMethods.size() - 1 ; j >= numMethodsToReturn; j--){
+            nCriticalMethods.add(slowestMethods.get(i));
+        }
+
+        return nCriticalMethods;
     }
 
     public List<ClassAbs> getUnderPerformingClasses(int i) {
-        return criticalClasses;
+        return criticalClasses;//TODO: returns all under-performing classes. fix it
     }
 
     public List<PackageAbs> getUnderPerformingPackages(int i) {
-        return criticalPackages;
+        return criticalPackages;//TODO: returns all under-performing packages. fix it
     }
 }

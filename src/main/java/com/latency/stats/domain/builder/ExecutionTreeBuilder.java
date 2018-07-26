@@ -39,7 +39,7 @@ public class ExecutionTreeBuilder {
     public ExTree buildAndRetrieveExecutionTree(){
 
         List<MethodBean> methods = latencyDAO.getOrderedMethods(requestID,appName);
-        assert(methods.size() > 1);
+        assert(methods.size() > 1);//for every openning method there needs to be a closing one
         MethodBean rootMethod = methods.get(0);
         root = new ConsTree(rootMethod);
         buildExecutionTree(methods,1,methods.size()-2,root);
@@ -88,12 +88,13 @@ public class ExecutionTreeBuilder {
 
         if(Math.abs(endIndex - beginIndex) >= 2){
             Stack<MethodBean> methodsOnstack = new Stack<>();
+
             int currentBeginIndex = beginIndex;
             MethodBean opennerMethod = methods.get(currentBeginIndex);
             methodsOnstack.add(opennerMethod);
-            boolean startOver = false;
+            boolean startOver = false; //to indicate completion of parsing the first method parenthesis in this range
 
-            for( int i = beginIndex + 1; i <= endIndex; i++ ){
+            for( int i = beginIndex + 1; i <= endIndex; i++ ){//parse all methods in range [beginIndex,endIndex]
                 MethodBean currentMethodBean = methods.get(i);
 
                 if(startOver){
@@ -101,19 +102,20 @@ public class ExecutionTreeBuilder {
                     opennerMethod = methods.get(currentBeginIndex);
                 }
 
+                //found the corresponding closer method for opennerMethod which is currentMethodBean
                 if(foundClosingMethod(methodsOnstack,opennerMethod,currentMethodBean)){
                     //pop from the stack
                     MethodBean poppedBean = methodsOnstack.pop();
                     assert (poppedBean.equals(opennerMethod));
                     ExTree newTree = new ConsTree(poppedBean);
                     root.addChild(newTree);
-                    beginIndex = beginIndex + 1;
+                    int newBeginIndex = currentBeginIndex + 1;
                     endIndex = i -1;
-                    buildExecutionTree(methods,beginIndex,endIndex,newTree);
+                    buildExecutionTree(methods,newBeginIndex,endIndex,newTree);
                     startOver = true;
 
                 }else if(foundClosingMethod(methodsOnstack,methodsOnstack.peek(),currentMethodBean)){
-                    methodsOnstack.pop();
+                    methodsOnstack.pop(); //found a closing method to some other method than opennerMethod
                 }
             }
         }

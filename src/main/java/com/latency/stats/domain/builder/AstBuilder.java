@@ -36,10 +36,12 @@ public class AstBuilder {
         List<MethodBean> methodBeanList=latencyDAO.getOrderedMethods(root.getName(),requestID);
 
         for(MethodBean method: methodBeanList){
+
             String fullMethodDefinition = method.getMethodAbs().getName();
             ServiceComponentBuilder builder = new ServiceComponentBuilder(fullMethodDefinition);
             List<ServiceAST> components = builder.getComponents();
             insertIntoApplication(components);
+
         }
 
         return root;
@@ -50,7 +52,6 @@ public class AstBuilder {
 
         ServiceAST currentRoot = root;
         for(ServiceAST component: components){
-
             if(!currentRoot.getChildren().contains(component)){
                 currentRoot.add(component);
             }
