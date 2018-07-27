@@ -48,7 +48,6 @@ public class LatencyStatsFacade {
         criticalClasses = new ArrayList<>();
         criticalMethods = new ArrayList<>();
         criticalPackages = new ArrayList<>();
-        generateCriticalComponents();
 
     }
 
@@ -136,7 +135,6 @@ public class LatencyStatsFacade {
 
 
     public void persistMethod(MethodEntity methodEntity){
-        LatencyDAO latencyDAO = new LatencyDAO();
         latencyDAO.saveMethod(methodEntity);
     }
     public List<MethodAbs> getUnderPerformingMethods(int i) {
