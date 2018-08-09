@@ -3,13 +3,17 @@ package com.latency.stats.domain;
 import com.latency.stats.dataaccess.LatencyDAO;
 import com.latency.stats.dataaccess.entity.MethodEntity;
 import com.latency.stats.domain.abstraction.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public class LatencyStatsFacade {
 
-    private ServiceAST service;
+    @Autowired
     private LatencyDAO latencyDAO;
+
     private Map<ServiceAST,Boolean> criticalComponents;
     private List<MethodAbs> criticalMethods;
     private List<ClassAbs> criticalClasses;
@@ -25,29 +29,14 @@ public class LatencyStatsFacade {
         this.requestID = requestID;
     }
 
-    public LatencyStatsFacade(ServiceAST service, long requestID){
-        this.service = service;
-        latencyDAO = new LatencyDAO();
+    public LatencyStatsFacade(){
         criticalComponents = new HashMap<>();
-        this.requestID = requestID;
+        requestID = -1;
 
         criticalClasses = new ArrayList<>();
         criticalMethods = new ArrayList<>();
         criticalPackages = new ArrayList<>();
         slowestMethods = new ArrayList<>();
-        generateCriticalComponents();
-
-    }
-
-    public LatencyStatsFacade(long requestID){
-
-        latencyDAO = new LatencyDAO();
-        criticalComponents = new HashMap<>();
-        this.requestID = requestID;
-
-        criticalClasses = new ArrayList<>();
-        criticalMethods = new ArrayList<>();
-        criticalPackages = new ArrayList<>();
 
     }
 
@@ -67,22 +56,7 @@ public class LatencyStatsFacade {
         this.latencyDAO = latencyDAO;
     }
 
-    public ServiceAST getService() {
-
-        return service;
-    }
-
-    public void setService(ServiceAST service) {
-        this.service = service;
-    }
-
-
-
-    private void generateCriticalComponents() {
-        generateCriticalComponents(service);
-    }
-
-    private void generateCriticalComponents(ServiceAST root) {
+    public void generateCriticalComponents(ServiceAST root) {
         if(root instanceof MethodAbs && methodIsCritical((MethodAbs)root)){
             criticalComponents.put(root,true); // for dp purposes
             criticalMethods.add((MethodAbs)root);
@@ -125,6 +99,8 @@ public class LatencyStatsFacade {
     }
 
     public List<MethodAbs> getNSlowestMethods(int n) {
+
+
         Collections.sort(slowestMethods);
         List<MethodAbs> nSlowestMethods = new ArrayList<>();
         for(int i =slowestMethods.size() - 1 ; i >= n; i--){
@@ -138,6 +114,7 @@ public class LatencyStatsFacade {
         latencyDAO.saveMethod(methodEntity);
     }
     public List<MethodAbs> getUnderPerformingMethods(int i) {
+
         Collections.sort(criticalMethods);
         List<MethodAbs> nCriticalMethods = new ArrayList<>();
         int numMethodsToReturn = (int)((i/100.0)*criticalMethods.size());

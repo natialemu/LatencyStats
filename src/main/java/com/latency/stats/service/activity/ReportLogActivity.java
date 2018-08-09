@@ -11,6 +11,7 @@ import com.latency.stats.domain.LatencyStatsFacade;
 import com.latency.stats.domain.builder.ExecutionTimeHelper;
 import com.latency.stats.service.representation.response.stats.mini.ClassStatsMini;
 import com.latency.stats.service.representation.response.stats.mini.PackageStatsMini;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import com.latency.stats.service.representation.response.GeneralReport;
 import com.latency.stats.service.representation.response.stats.mini.MethodStatsMini;
@@ -21,16 +22,26 @@ import java.util.List;
 @Service
 public class ReportLogActivity {
 
+    @Autowired
+    private ExecutionTimeHelper executionTimeHelper;
+
+    @Autowired
+    private LatencyStatsFacade latencyStatsFacade;
+
+
     public ResponseEntity<?> getGeneralReport(LatencyStatsRequest request) {
 
-        LatencyStatsFacade statsFacade = getLatencyStatsFacade(request);
+
+        ServiceAST service = executionTimeHelper.getService(request);
+        latencyStatsFacade.setRequestID(Long.parseLong(request.getBody().getRequestID()));
+        latencyStatsFacade.generateCriticalComponents(service);
 
         GeneralReport generalReport = new GeneralReport();
 
         generalReport.setRequestID(request.getBody().getRequestID());
-        setClassStats(generalReport,statsFacade);
-        setMethodStats(generalReport,statsFacade);
-        setPackageStats(generalReport,statsFacade);
+        setClassStats(generalReport,latencyStatsFacade);
+        setMethodStats(generalReport,latencyStatsFacade);
+        setPackageStats(generalReport,latencyStatsFacade);
 
         return ResponseEntity.ok(generalReport);
     }
@@ -75,22 +86,9 @@ public class ReportLogActivity {
 
     }
 
-    public LatencyStatsFacade getLatencyStatsFacade(LatencyStatsRequest request){
-
-        String appName = request.getBody().getAppName();
-        String requestId = request.getBody().getAppName();
-
-        ExecutionTimeHelper helper = new ExecutionTimeHelper(appName,requestId);
-        ServiceAST service = helper.getService();
-
-        LatencyStatsFacade latencyStats = new LatencyStatsFacade(service,Long.parseLong(requestId));
-        return latencyStats;
-
-    }
-
     public ResponseEntity<?> getExhaustiveReport(LatencyStatsRequest request) {
 
-        LatencyStatsFacade statsFacade = getLatencyStatsFacade(request);
+
 
         return null;
     }
@@ -109,8 +107,7 @@ public class ReportLogActivity {
 
         MethodEntity entity = new MethodEntity(Long.parseLong(requestId),appName,methodName,stackPopRank,stackPushRank,stackPopTime,stackPushTime);
 
-        LatencyStatsFacade statsFacade = new LatencyStatsFacade(Long.parseLong(request.getMethodLogRequestBody().getRequestId()));
-        statsFacade.persistMethod(entity);
+        latencyStatsFacade.persistMethod(entity);
     }
 
 }

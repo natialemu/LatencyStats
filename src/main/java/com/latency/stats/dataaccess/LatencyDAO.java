@@ -5,10 +5,13 @@ import com.latency.stats.dataaccess.repository.LatencyStatsRepository;
 import com.latency.stats.domain.MethodBean;
 import com.latency.stats.domain.abstraction.MethodAbs;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Component
 public class LatencyDAO {
 
     @Autowired
@@ -70,4 +73,5 @@ public class LatencyDAO {
         MethodEntity entity = latencyStatsRepository.getMethodEntitiesByMethodNameAndRequestID(root.getName(),requestID);
         return entity.getAvgMethodRuntime();
     }
+
 }

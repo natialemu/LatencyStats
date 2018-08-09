@@ -3,18 +3,18 @@ package com.latency.stats.domain.builder;
 import com.latency.stats.dataaccess.LatencyDAO;
 import com.latency.stats.domain.MethodBean;
 import com.latency.stats.domain.abstraction.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class AstBuilder {
+
+    @Autowired
     private LatencyDAO latencyDAO;
     private ServiceAST root;
     private String requestID;
-
-    public AstBuilder(){
-        latencyDAO = new LatencyDAO();
-
-
-    }
 
     public AstBuilder withApplicationName(String applicationName){
 

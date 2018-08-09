@@ -6,23 +6,24 @@ import com.latency.stats.domain.execution.ConsTree;
 import com.latency.stats.domain.execution.Empty;
 import com.latency.stats.domain.execution.ExTree;
 import com.latency.stats.domain.execution.TrueExecutionTimeRetriever;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.Stack;
 
 public class ExecutionTreeBuilder {
 
-    private static ExTree root;
+    @Autowired
     private LatencyDAO latencyDAO;
+
+    private static ExTree root;
+
     private String requestID;
     private String appName;
     private boolean performPostOrder;
-    private static TrueExecutionTimeRetriever executionTimeRetriever;
 
     public ExecutionTreeBuilder(){
         root = new Empty();
-        latencyDAO = new LatencyDAO();
-        executionTimeRetriever = new TrueExecutionTimeRetriever();
     }
 
     public ExecutionTreeBuilder withRequestId(String requestID){
@@ -36,7 +37,7 @@ public class ExecutionTreeBuilder {
     }
 
 
-    public ExTree buildAndRetrieveExecutionTree(){
+    public void generateExecutionTimeRetriver(){
 
         List<MethodBean> methods = latencyDAO.getOrderedMethods(requestID,appName);
         assert(methods.size() > 1);//for every openning method there needs to be a closing one
@@ -46,13 +47,9 @@ public class ExecutionTreeBuilder {
         if(performPostOrder){
             postOrderExecutionTimeGenerator(root);
         }
-        return root;
 
     }
 
-    public TrueExecutionTimeRetriever getExecutionTimeRetriever(){
-        return executionTimeRetriever;
-    }
 
     /**
      * Performs a post order traversal of the tree to generate the accurate
@@ -61,7 +58,7 @@ public class ExecutionTreeBuilder {
     private void postOrderExecutionTimeGenerator(ExTree currentNode) {
         if(!currentNode.hasChildren()){
             //DO SOMETHING
-            executionTimeRetriever.addMethod(currentNode.getMethod(),currentNode.getMethod().getOverallExecutionTime());
+            TrueExecutionTimeRetriever.addMethod(currentNode.getMethod(),currentNode.getMethod().getOverallExecutionTime());
             return;
         }
 
@@ -69,7 +66,7 @@ public class ExecutionTreeBuilder {
             postOrderExecutionTimeGenerator(childNode);
         }
         long currentExecutionTime = currentNode.getMethod().getOverallExecutionTime() - sumTimeOf(currentNode.getChildren());
-        executionTimeRetriever.addMethod(currentNode.getMethod(),currentExecutionTime);
+        TrueExecutionTimeRetriever.addMethod(currentNode.getMethod(),currentExecutionTime);
 
 
 

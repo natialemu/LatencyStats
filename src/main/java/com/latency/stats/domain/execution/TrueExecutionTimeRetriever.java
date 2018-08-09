@@ -2,22 +2,22 @@ package com.latency.stats.domain.execution;
 
 import com.latency.stats.domain.MethodBean;
 import com.latency.stats.domain.abstraction.MethodAbs;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class TrueExecutionTimeRetriever {
-    private Map<MethodAbs, Long> mapMethodToSpeed;
+    public static Map<MethodAbs, Long> mapMethodToSpeed = new HashMap<>();
 
-    public TrueExecutionTimeRetriever(){
-        mapMethodToSpeed = new HashMap<>();
+    TrueExecutionTimeRetriever(){
     }
 
-    public void addMethod(MethodBean methodBean, Long exTime){
+    public static void addMethod(MethodBean methodBean, Long exTime){
         mapMethodToSpeed.put(methodBean.getMethodAbs(),exTime);
     }
 
-    public Long retrieveExecutionTime(MethodAbs methodAbs){
+    public static Long retrieveExecutionTime(MethodAbs methodAbs){
         return mapMethodToSpeed.get(methodAbs);
     }
 }

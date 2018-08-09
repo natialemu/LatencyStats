@@ -1,3 +1,4 @@
+
 application:
   name: "Latency Stats"
   home: target/
@@ -36,5 +37,11 @@ spring:
     jpa:
        databasePlatform: org.hibernate.dialect.MySQLDialect
 
+logging:
+  file: ${APP_LOGS:${application.home:target}/logs}/${application.name}.txt
+  level:
+    org.springframework: INFO
+    com.expedia.www.cs.lds.cacheloader: INFO
+    ROOT: ERROR
 
 
